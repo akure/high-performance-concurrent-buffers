@@ -27,6 +27,53 @@ List of concurrent buffers:
 5. concurrent nested buffers
     we will develop this concept as we go ahead with basic concurrent buffers.
     
+Concurrent deque design:
+
+producer threads   deque      consumer threads
+
+write mutex  [one common write buffer]  read mutex  
+  
+  ----                                ----  local buffer ----
+  ----          ==============        ----  local buffer ----  
+  ----                                ----  local buffer ----
+  
+In the above situation where there is a one common write buffer where producers are keep on writting their data. 
+How do consumer threads come to know that they have to pick up something from the buffer and remember we have multiple 
+consumer.
+
+What are different strategy we can design form consumers?
+Consumer thread picking strategy:
+   All consumer thread will run independently.
+   We can have one load distributer thread, just before consumers. In this case consumer threads will just look up 
+   into their local buffer. 
+   Call for a thread to one of the free consumer threads to pick up the data once the data size becomes of 
+   some defined size n. 
+   
+Asycn strategy:
+   consumer threads to use an async buffer read timer, wherein after timer expiry it will copy n elements 
+   to its local buffer and then process the data. ofcourse it will check if there are n element available 
+   in the buffer. If less then n elememnt exist, it will copy all the element. Well here I am saying copy initially.
+   but we will implement move version of the same concpet for high speed performance.
+   Its a strategy where an asyn function in a thread wakes up on his own and do its work and then sleep again. 
+   
+Pickup call strategy:
+ Consumer thread will be informed by the producer threads or by some other monitoring entity in the system.
+ Once a condition is reached like enough size is available in the buffer, then consumer will be informed.
+ 
+Load distributer strategy:
+ Here in this case there is one load distributet thread just before the consumers. It can itself be async or pickup call
+ strategy. but once it knows there is data  available in the buffer in its active situation, it can again can have
+ push/move strategy or pickup call strategy or assignment strategy. 
+ 
+ Push or move strategy of load distributer thread:
+ 
+ Pick up call strategy by load distributer thread:
+ 
+ Assignment strategy by load distributer thread:
+ 
+ 
+Async timer Vs Signal events between threads, which one should be used?
+    
 
 
 
