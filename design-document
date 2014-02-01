@@ -1,0 +1,37 @@
+This is the design document for the high performance concurrent buffer project.
+
+In this project I am planning to implement buffers based on different data structures which can server as concurrent buffers 
+for multi-threaded system design. 
+
+The programming language that we concentrate is C++0x ( C++11 ) 
+
+We would also compare the performace of different buffers in different scenarios, initially we would consider the 
+situation where the server is receiving a very high load of input data lets sat 15,000 msg per sec continously for
+n ( say 8 hours a day in fix time) Well the input rate pattern can vary between 10,000 msg per sec to 15,000 msg per sec.
+We have to design a concurrent buffer that can be used in such a situation, It should be scalable and enough flexible for 
+multiple threads. It should be able to support multi producer multi consumer patterns for high processing.
+
+There should be no cumulative data accumulation in the buffers for a long time performance. 
+Data should be consumable from the buffers.
+Also there should be no loss in the input data which are coming from the network. 
+
+List of concurrent buffers:
+1. concurrent dequeue 
+
+2. concurrent vector
+
+3. concurrent map
+
+4. concurrent  linked list
+
+5. concurrent nested buffers
+    we will develop this concept as we go ahead with basic concurrent buffers.
+    
+
+
+
+
+
+
+
+
